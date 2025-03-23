@@ -17,24 +17,10 @@ jobs:
       - name: Zip static site content
         run: zip -r release.zip . -x '*.git*'
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: static-site
-          path: release.zip
-
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: static-site
-
-      - name: Unzip artifact
-        run: unzip release.zip
-
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'PlatformTestIEJL'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1E29169982A447F6B8BA77C7EA14F5BF }}
-          package: .
+          package: release.zip
